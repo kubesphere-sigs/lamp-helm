@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "lamp.fullname" . }}-gateway
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "lamp.gateway.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "lamp.gateway.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "lamp.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.components.gateway.repository }}:{{ .Values.components.gateway.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.components.gateway.pullPolicy }}
+          env:
+            - name: NACOS_IP
+              value: "{{ .Values.nacos.ip }}"
+            - name: NACOS_PORT
+              value: "{{ .Values.nacos.port }}"
+            - name: NACOS_ID
+              value: "{{ .Values.nacos.id }}"
+          ports:
+            - name: http
+              containerPort: 8760
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /api/doc.html
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/doc.html
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "lamp.fullname" . }}-gateway
+  labels:
+    {{- include "lamp.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8760
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "lamp.gateway.selectorLabels" . | nindent 4 }}
