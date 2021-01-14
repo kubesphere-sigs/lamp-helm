@@ -2,19 +2,19 @@ replicaCount: 1
 
 components:
   gateway:
-    repository: surenpi/zuihou-gateway-server
+    repository: kubespheresig/zuihou-gateway-server
     pullPolicy: IfNotPresent
     tag: ""
   oauth:
-    repository: surenpi/zuihou-oauth-server
+    repository: kubespheresig/zuihou-oauth-server
     pullPolicy: IfNotPresent
     tag: ""
   authority:
-    repository: surenpi/zuihou-authority-server
+    repository: kubespheresig/zuihou-authority-server
     pullPolicy: IfNotPresent
     tag: ""
   web:
-    repository: surenpi/lamp-web
+    repository: kubespheresig/lamp-web
     pullPolicy: IfNotPresent
     tag: ""
 
