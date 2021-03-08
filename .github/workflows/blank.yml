@@ -21,7 +21,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: ｜
-          curl -L https://github.com/linuxsuren/http-downloader/releases/latest/download/hd-linux-amd64.tar.gz | tar xzv
+          wget https://github.com/linuxsuren/http-downloader/releases/latest/download/hd-linux-amd64.tar.gz
+          tar xzvf hd-linux-amd64.tar.gz
           sudo mv hd /usr/local/bin
           sudo hd install -t 8 helm/helm
           helm package .
