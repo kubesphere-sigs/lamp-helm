@@ -20,6 +20,7 @@ jobs:
 
       - name: Package
         run: |
+          helm version
           wget https://github.com/linuxsuren/http-downloader/releases/latest/download/hd-linux-amd64.tar.gz
           tar xzvf hd-linux-amd64.tar.gz
           sudo mv hd /usr/local/bin
